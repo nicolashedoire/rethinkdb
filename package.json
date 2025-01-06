@@ -1,5 +1,31 @@
 {
+  "name": "nextjs-rethinkdb-redis-app",
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "node server.js",
+    "build": "next build",
+    "start": "NODE_ENV=production node server.js",
+    "docker:build": "docker-compose build",
+    "docker:up": "docker-compose up",
+    "docker:down": "docker-compose down",
+    "docker:logs": "docker-compose logs -f",
+    "docker:start": "docker-compose up --build",
+    "docker:restart": "docker-compose down && docker-compose up --build",
+    "docker:clean": "docker-compose down -v"
+  },
   "dependencies": {
-    "recharts": "^2.12.7"
+    "express": "^4.17.1",
+    "generic-pool": "^3.8.2",
+    "ioredis": "^4.27.6",
+    "next": "latest",
+    "os-utils": "^0.0.14",
+    "react": "latest",
+    "react-dom": "latest",
+    "recharts": "^2.12.7",
+    "rethinkdb": "^2.4.2"
+  },
+  "devDependencies": {
+    "@types/node": "latest",
+    "@types/react": "latest"
   }
 }

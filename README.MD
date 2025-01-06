@@ -1,93 +1,102 @@
 # Real-time CPU Metrics Dashboard
 
-This project is a real-time CPU metrics visualization dashboard built with Next.js, RethinkDB, and Redis. It collects CPU usage data and displays it in a real-time chart using Server-Sent Events (SSE) and Recharts.
+Application de surveillance CPU en temps réel construite avec Next.js, RethinkDB et Redis.
 
-## Prerequisites
+## Structure du Projet
+
+```
+rethinkdb/
+├── pages/
+│   └── index.js
+├── public/
+│   └── favicon.ico
+├── utils/
+│   └── rethinkdb-pool.js
+├── server.js
+├── docker-compose.yml
+├── Dockerfile
+├── insert-test-data.js
+├── next.config.js
+├── package.json
+└── start.sh
+```
+
+## Prérequis
 
 - Docker
 - Docker Compose
-- Node.js 18+ (for local development)
+- Node.js 18+
 
-## Project Structure
+## Installation
 
-- `app/` - Next.js application
-  - `pages/` - React components and pages
-  - `utils/` - Utility functions including database connection pool
-- `server.js` - Express server with Next.js integration
-- `insert-test-data.js` - Script to collect and insert CPU metrics
-- `docker-compose.yml` - Docker services configuration
-- `Dockerfile` - Multi-stage build configuration
-
-## Quick Start
-
-1. Clone the repository
-2. Start the application:
-```bash
-docker-compose up --build
-```
-
-The application will be available at `http://localhost:5000`
-
-## Services
-
-The application consists of three main services:
-
-- **App**: Next.js application with Express server (port 5000)
-- **RethinkDB**: Database for storing metrics (ports 28015, 8080)
-- **Redis**: Cache server (port 6380)
-
-## Development
-
-For local development:
-
-1. Install dependencies:
+1. Clonez le repository
+2. Installez les dépendances :
 ```bash
 npm install
 ```
 
-2. Start RethinkDB and Redis:
+## Commandes Disponibles
+
 ```bash
-docker-compose up rethinkdb redis
+# Développement
+npm run dev                # Lance le serveur de développement
+npm run build             # Build l'application
+npm run start             # Démarre en mode production
+
+# Docker
+npm run docker:build      # Construit les images Docker
+npm run docker:up         # Démarre les conteneurs
+npm run docker:down       # Arrête les conteneurs
+npm run docker:logs       # Affiche les logs en temps réel
+npm run docker:start      # Construit et démarre (commande recommandée)
+npm run docker:restart    # Redémarre tous les services
+npm run docker:clean      # Nettoie les conteneurs et volumes
 ```
 
-3. Run the development server:
+## Démarrage Rapide
+
 ```bash
-npm run dev
+npm run docker:start
 ```
 
-## Architecture
+L'application sera accessible sur :
+- Application : http://localhost:5000
+- Interface RethinkDB : http://localhost:8080
 
-- The application uses Server-Sent Events (SSE) for real-time updates
-- CPU metrics are collected every second using the `os-utils` package
-- Data is stored in RethinkDB and can be visualized through the RethinkDB admin interface (port 8080)
-- Connection pooling is implemented for RethinkDB connections
+## Services
 
-## Environment Variables
+- **Application Next.js** : Port 5000
+- **RethinkDB** : Ports 28015 (DB) et 8080 (Admin)
+- **Redis** : Port 6380
 
-- `NODE_ENV`: Set to 'production' in Docker environment
-- Database configurations are set in the connection files:
-  - RethinkDB: host: 'rethinkdb', port: 28015
-  - Redis: host: 'redis', port: 6379
+## Surveillance
 
-## Monitoring
+Le dashboard affiche :
+- Un graphique en temps réel de l'utilisation CPU
+- Les dernières valeurs mesurées
+- Mises à jour automatiques via SSE (Server-Sent Events)
 
-- RethinkDB admin interface: `http://localhost:8080`
-- Application metrics: `http://localhost:5000`
+## Dépannage
 
-## Troubleshooting
+Si l'application ne démarre pas :
 
-1. If the application fails to start, check the Docker logs:
+1. Vérifiez les logs :
 ```bash
-docker-compose logs -f
+npm run docker:logs
 ```
 
-2. Common issues:
-   - Database connection failures: Check if RethinkDB is healthy
-   - Port conflicts: Ensure ports 5000, 28015, 8080, and 6380 are available
-   - Permission issues: The container runs as non-root user 'nextjs'
+2. Redémarrez proprement :
+```bash
+npm run docker:restart
+```
 
-## Security Notes
+3. Problèmes courants :
+   - Ports déjà utilisés (5000, 28015, 8080, 6380)
+   - Échec de connexion aux bases de données
+   - Problèmes de permissions Docker
 
-- The application runs as a non-root user in production
-- Environment variables should be properly configured in production
-- Default ports should be changed in production environment
+## Notes
+
+- L'application utilise des Server-Sent Events pour les mises à jour en temps réel
+- Les données sont collectées toutes les secondes
+- Utilisation de connection pooling pour RethinkDB

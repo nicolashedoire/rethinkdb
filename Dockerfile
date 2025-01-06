@@ -3,12 +3,12 @@ FROM node:18-alpine AS builder
 
 WORKDIR /app
 
-COPY app/package*.json ./
-COPY app/next.config.js ./
+COPY package*.json ./
+COPY next.config.js ./
 
 RUN npm install
 
-COPY app .
+COPY . .
 
 RUN npm run build
 
@@ -37,6 +37,6 @@ RUN chmod +x start.sh
 
 USER nextjs
 
-EXPOSE 3000
+EXPOSE 5000
 
 CMD ["./start.sh"]
