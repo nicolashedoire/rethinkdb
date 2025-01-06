@@ -1,0 +1,46 @@
+version: '3'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "5000:5000" 
+    depends_on:
+      rethinkdb:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    environment:
+      - NODE_ENV=production
+
+  rethinkdb:
+    image: rethinkdb:latest
+    ports:
+      - "28015:28015"
+      - "8080:8080" 
+    volumes:
+      - rethinkdb_data:/data
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 40s
+
+  redis:
+    image: redis:alpine
+    ports:
+      - "6380:6379" 
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  rethinkdb_data:
+  redis_data:
