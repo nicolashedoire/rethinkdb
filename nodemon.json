@@ -1,0 +1,13 @@
+{
+    "watch": [
+      "server.js",
+      "pages/",
+      "components/",
+      "utils/",
+      "src/",
+      "public/"
+    ],
+    "ext": "js,jsx,json,css",
+    "ignore": ["node_modules/", ".next/"],
+    "exec": "node server.js"
+  }

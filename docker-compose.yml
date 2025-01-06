@@ -15,6 +15,14 @@ services:
     environment:
       - NODE_ENV=production
 
+  data-inserter:
+    build:
+      context: .
+    command: ["node", "/app/insert-test-data.js"]
+    depends_on:
+      - rethinkdb
+    restart: always
+
   rethinkdb:
     image: rethinkdb:latest
     ports:

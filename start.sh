@@ -1,7 +1,10 @@
 #!/bin/sh
 
-# Démarrer le script d'insertion de données en arrière-plan
-node insert-test-data.js &
+# Démarre le serveur en arrière-plan
+npm start &
 
-# Démarrer le serveur principal
-node server.js
+# Démarre le script insert-test-data.js
+node /app/insert-test-data.js
+
+# Empêche le conteneur de se terminer
+wait
